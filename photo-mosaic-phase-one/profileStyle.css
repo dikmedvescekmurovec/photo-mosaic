@@ -1,0 +1,179 @@
+@charset "utf-8";
+/* CSS Document */
+
+.site-title{
+	font-size:40px;
+	padding-left: 100px;
+	font-weight: bold;
+}
+
+div {
+	font-family: Arial;
+}
+
+h1, h2, h3 {
+	font-family: Tahoma;
+}
+header{
+	background-color: #4F4F4F;	
+}
+
+ul.main-menu {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow:hidden;
+	background-color: #333;
+}
+
+li.main-menu {
+	float:left;
+}
+li.main-menu > a {
+	display: inline-block;
+	color: white;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+}
+li.main-menu > a:hover{
+	background-color: #111;		
+}
+li.main-menu.account-links {
+	float:right;	
+	font-size:large;
+}
+
+.main-content{
+	max-width: 9600px;	
+}
+div.search{
+	
+	padding-top: 50px;
+	display: inline-block;
+	width:20%;
+	float:left;
+}
+div.third-column, div.first-column{
+	display:inline-block;
+	width:20%;
+	float:left;
+}
+
+div.search  label {
+	float:left;
+	clear: both;
+}
+.projects, .second-column, .user-information{
+	display: inline-block;
+	width: 60%;
+	float:left;
+}
+div.project {
+	padding: 10px;
+	padding-bottom: 30px;
+	border-style:groove;
+}
+
+div.project div.title {
+	font-weight:bold;
+}
+
+div.project div.image img {
+	position:relative;
+	margin-left: 10%;
+	margin-right: 10%;
+	max-width: 80%;
+	height:auto;
+}
+
+div.project .footer .funded{
+	text-align:center;
+}
+div.project .footer .tags{
+	float:left;
+}
+div.project .footer .rating{
+	float:right;
+}
+
+footer{
+	clear:both;
+	background-color: #333;
+}
+
+footer  a {
+	/*I want to put these to the right side of page 
+	float:right messes things up*/
+	display: inline-block;
+	color: white;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+	bottom:0;
+}
+footer a:hover{
+	background-color: #111;		
+}
+
+/*Style for profile*/
+.user-image{
+	position:absolute;
+	padding: 50px 20px 20px 20px;
+	max-height: 150px;
+	max-width: 150px;
+}
+
+.banner, .project-banner {
+	float:left;
+	width: 100%;
+	height: 200px;
+}
+
+.name, .oneliner {
+	position:absolute;
+	padding-top: 100px;
+	padding-left: 200px;
+}
+.name > h1, .oneliner > h3 {
+	background-color: white;
+}
+.oneliner {
+	
+	padding-top:140px;
+}
+.basic-info, .contact-info, .education-work, .personal-information, .my-projects, .followed-projects{
+	padding: 10px;
+	border-style: groove;
+}
+
+/*Styling for project */
+
+div.comment {
+	padding: 5% 10%;
+	border-style: groove;
+}
+
+div.comment .comment-image {
+	max-height: 150px;
+	max-width: 150px;
+	float: left;
+}
+
+.comment-input {
+	padding-top: 60px;
+	padding-bottom: 100px;
+}
+
+.comment-input-text {
+	width: 100%;
+	clear:both;
+	height: 100px;
+}
+
+.comment-input-button {
+	height: 50px;
+	width: 100px;
+	float:right;
+	clear:both;
+}
