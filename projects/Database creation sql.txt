@@ -1,0 +1,18 @@
+BEGIN;
+--
+-- Create model Comment
+--
+CREATE TABLE "projects_comment" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "comment_text" varchar(500) NOT NULL, "comment_owner" varchar(20) NOT NULL);
+--
+-- Create model Project
+--
+CREATE TABLE "projects_project" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "project_name" varchar(200) NOT NULL, "project_owner" varchar(20) NOT NULL, "project_text" varchar(5000) NOT NULL, "project_funded" decimal NOT NULL, "project_rating" decimal NOT NULL, "pub_date" datetime NOT NULL);
+--
+-- Add field project to comment
+--
+ALTER TABLE "projects_comment" RENAME TO "projects_comment__old";
+CREATE TABLE "projects_comment" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "comment_text" varchar(500) NOT NULL, "comment_owner" varchar(20) NOT NULL, "project_id" integer NOT NULL REFERENCES "projects_project" ("id"));
+INSERT INTO "projects_comment" ("project_id", "comment_owner", "id", "comment_text") SELECT NULL, "comment_owner", "id", "comment_text" FROM "projects_comment__old";
+DROP TABLE "projects_comment__old";
+CREATE INDEX "projects_comment_project_id_220d4b34" ON "projects_comment" ("project_id");
+COMMIT;

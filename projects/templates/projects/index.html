@@ -1,0 +1,37 @@
+{% extends "projects/base.html" %}
+
+{% block content %}
+<div class="projects">
+				<h1> Hot Projects </h1>
+				{% if latest_projects %}
+					{% for project in latest_projects %}
+						<div class="project">
+							<div class="title">
+								<h2> <a href="/projects/{{project.id}}/">{{project.project_name}}</a></h2>
+								<h3> <a href="profile.html">{{project.project_owner}}</a></h3>
+							</div>
+							<div class="content">
+								<div class="text">
+								<p>{{project.project_text}}</p>
+								</div>
+								<div class="image">
+									<img src="slika_projekta.jpg" alt="slika-projekta"/>
+								</div>
+								<div class="video">
+									<video width="640" height="480" controls>
+									  <source src="bee.mp4" type="video/mp4">
+									Your browser does not support this video.
+									</video>
+								</div>
+							</div>
+							<div class="footer">
+								<div class="funded">{{project.percentage}}% Funded<br/>[{{project.project_funded}}/{{project.project_needed}}]</div>
+								<div class="rating">Rating: {{project.project_rating}} Stars</div>
+							</div>
+						</div>
+					{% endfor %}
+				{% else %}
+					<p> No projects here. </p>
+				{% endif %}
+</div>
+{% endblock %}
