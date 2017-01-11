@@ -2,10 +2,12 @@ from django.db import models
 import datetime
 from django.utils import timezone
 
+from django.contrib.auth.models import User
+
 class Project(models.Model):
 
 	project_name = models.CharField(max_length=200)
-	project_owner = models.CharField(max_length=20)
+	project_owner = models.ForeignKey(User, on_delete=models.CASCADE)
 	project_text = models.CharField(max_length=5000)
 	project_funded = models.DecimalField(max_digits = 20, decimal_places=2)
 	project_needed = models.DecimalField(max_digits = 20, decimal_places=2)
@@ -28,5 +30,5 @@ class Comment(models.Model):
 		
 	project = models.ForeignKey(Project, on_delete=models.CASCADE)
 	comment_text = models.CharField(max_length=500)
-	comment_owner = models.CharField(max_length=20)
+	comment_owner = models.ForeignKey(User, on_delete=models.CASCADE)
 	

@@ -16,3 +16,16 @@ INSERT INTO "projects_comment" ("project_id", "comment_owner", "id", "comment_te
 DROP TABLE "projects_comment__old";
 CREATE INDEX "projects_comment_project_id_220d4b34" ON "projects_comment" ("project_id");
 COMMIT;
+
+
+ALTERING OF DATABASE
+
+BEGIN;
+--
+-- Add field project_needed to project
+--
+ALTER TABLE "projects_project" RENAME TO "projects_project__old";
+CREATE TABLE "projects_project" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "project_needed" decimal NOT NULL, "project_name" varchar(200) NOT NULL, "project_owner" varchar(20) NOT NULL, "project_text" varchar(5000) NOT NULL, "project_funded" decimal NOT NULL, "project_rating" decimal NOT NULL, "pub_date" datetime NOT NULL);
+INSERT INTO "projects_project" ("project_needed", "project_rating", "project_name", "id", "pub_date", "project_text", "project_owner", "project_funded") SELECT '1000.00', "project_rating", "project_name", "id", "pub_date", "project_text", "project_owner", "project_funded" FROM "projects_project__old";
+DROP TABLE "projects_project__old";
+COMMIT;

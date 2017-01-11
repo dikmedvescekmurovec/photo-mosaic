@@ -1,5 +1,18 @@
 {% extends "projects/base.html" %}
-
+{% load static from staticfiles %}
+{% block stylesheet %}
+	<link rel="stylesheet" type="text/css" href="{% static 'projects/style.css' %}" />
+{% endblock %}
+{% block user %}
+	{% if user.is_authenticated %}
+		<li class ="main-menu account-links"><a href="{% url 'user' user.id %}">{{user.username}}</li>
+		<li class ="main-menu account-links"><a href="{% url 'logout_user' %}">Logout</a></li>
+	{% else %}
+	<li class ="main-menu account-links"><a href="{% url 'login_user' %}">Login</a></li>
+	<!--- Change this lol -->
+	<li class ="main-menu account-links"><a href="{% url 'register' %}">Register</a></li>
+	{% endif %}
+{% endblock %}
 {% block content %}
 <div class="projects">
 				<h1> Hot Projects </h1>
@@ -7,19 +20,19 @@
 					{% for project in latest_projects %}
 						<div class="project">
 							<div class="title">
-								<h2> <a href="/projects/{{project.id}}/">{{project.project_name}}</a></h2>
-								<h3> <a href="profile.html">{{project.project_owner}}</a></h3>
+								<h2> <a href="{% url 'project' project.id %}">{{project.project_name}}</a></h2>
+								<h3> <a href="{% url 'user' project.project_owner.id %}">{{project.project_owner}}</a></h3>
 							</div>
 							<div class="content">
 								<div class="text">
 								<p>{{project.project_text}}</p>
 								</div>
 								<div class="image">
-									<img src="slika_projekta.jpg" alt="slika-projekta"/>
+									<img src="{%static 'projects/slika_projekta.jpg'%}" alt="slika-projekta"/>
 								</div>
 								<div class="video">
 									<video width="640" height="480" controls>
-									  <source src="bee.mp4" type="video/mp4">
+									  <source src=" {% static 'projects/bee.mp4' %} " type="video/mp4">
 									Your browser does not support this video.
 									</video>
 								</div>

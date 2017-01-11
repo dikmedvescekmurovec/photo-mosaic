@@ -1,0 +1,19 @@
+{% extends "projects/base.html" %}
+{% load static from staticfiles %}
+
+{% block stylesheet %}
+	<link rel="stylesheet" type="text/css" href="{% static 'projects/style.css' %}" />
+{% endblock %}
+{% block user %}
+	{% if user.is_authenticated %}
+		<li class ="main-menu account-links"><a href="{% url 'user' user.id %}">{{user.username}}</li>
+		<li class ="main-menu account-links"><a href="{% url 'logout_user' %}">Logout</a></li>
+	{% else %}
+	<li class ="main-menu account-links"><a href="{% url 'login_user' %}">Login</a></li>
+	<!--- Change this lol -->
+	<li class ="main-menu account-links"><a href="{% url 'register' %}">Register</a></li>
+	{% endif %}
+{% endblock %}
+{% block content %}
+<h1>{{ viewed_user.username }}</h1>
+{% endblock %}

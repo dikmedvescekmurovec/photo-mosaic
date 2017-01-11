@@ -1,16 +1,18 @@
+{% load static %}
+
 <!doctype html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
     <title>Photo Mosaic</title>
-    <link rel="stylesheet" href="style.css">
+    {%block stylesheet%} {%endblock%}
 </head>
 
 <body>
 	<header>
 		<div class="header-content">
-        	<img src="logo.png" alt="logo"/>
+        	<img src="{% static 'projects/logo.png' %}" alt="logo"/>
             <span class="site-title">Photo mosaic</span>
         </div>
     </header>
@@ -18,12 +20,11 @@
 		<div class="main-nav">
 			<nav>
 				<ul class="main-menu">
-					<li class="main-menu"><a href="index.html">Home</a></li>
-					<li class="main-menu"><a href="index.html">Hot</a></li>
-					<li class="main-menu"><a href="trending.html">Trending</a></li>
-					<li class="main-menu"><a href="new.html">New</a></li>
-					<li class ="main-menu account-links"><a href="login.html">Login</a></li>
-					<li class ="main-menu account-links"><a href="register.html">Register</a></li>
+					<li class="main-menu"><a href="{% url 'index' %}">Home</a></li>
+					<li class="main-menu"><a href="{% url 'index' %}">Hot</a></li>
+					<li class="main-menu"><a href="{% url 'index' %}">Trending</a></li>
+					<li class="main-menu"><a href="{% url 'index' %}">New</a></li>
+					{%block user%} {% endblock %}
 				</ul>
 			</nav>
 		</div>
@@ -41,7 +42,6 @@
 			   </form>
             </div>
 			{%block content%} {% endblock %}
-            </div>
 			<div class="third-column"> </div>
 		</div>
     </div>
