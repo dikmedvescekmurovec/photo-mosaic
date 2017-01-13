@@ -31,4 +31,4 @@ class Comment(models.Model):
 	project = models.ForeignKey(Project, on_delete=models.CASCADE)
 	comment_text = models.CharField(max_length=500)
 	comment_owner = models.ForeignKey(User, on_delete=models.CASCADE)
-	
+	pub_date = models.DateTimeField('date published')

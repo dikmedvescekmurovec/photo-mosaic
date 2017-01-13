@@ -21,9 +21,9 @@
 			<nav>
 				<ul class="main-menu">
 					<li class="main-menu"><a href="{% url 'index' %}">Home</a></li>
-					<li class="main-menu"><a href="{% url 'index' %}">Hot</a></li>
-					<li class="main-menu"><a href="{% url 'index' %}">Trending</a></li>
-					<li class="main-menu"><a href="{% url 'index' %}">New</a></li>
+					<li class="main-menu"><a href="{% url 'hot' %}">Hot</a></li>
+					<li class="main-menu"><a href="{% url 'trending' %}">Trending</a></li>
+					<li class="main-menu"><a href="{% url 'new' %}">New</a></li>
 					{%block user%} {% endblock %}
 				</ul>
 			</nav>

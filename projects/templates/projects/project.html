@@ -21,6 +21,9 @@
 			<div class="title">
 				<h2> {{ project.project_name}}</h2>
 			</div>
+			{% if user.is_superuser %}
+				<p><a href="{% url 'delete_project' project.id %}">Delete project </a></p>
+			{% endif %}
 			<div class="content">
 				<div class="text">
 				<p>Lorem ipsum dolor sit amet, consectetur 
@@ -46,11 +49,15 @@
 
 	<div class="user-comments">
 		<h2> User comments </h2>
-		{% for comment in project.comment_set.all %}
+		{% for comment in project.comment_set.all reversed%}
 		<div class="comment">
 			<img src="{% static 'projects/icon-user.png' %}" class="comment-image" alt="icon-user"/>
 			<h3 class="comment-owner"> {{comment.comment_owner}} </h3>
 			<p class="comment-content"> {{ comment.comment_text }} </p>
+			<p class="comment-timestamp"> {{ comment.pub_date }} </p>
+			{% if user.is_superuser %}
+				<p><a href="{% url 'delete_comment' comment.id %}">Delete comment </a></p>
+			{% endif %}
 		</div>
 		{% endfor %}
 		{% if user.is_authenticated %}

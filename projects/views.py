@@ -7,19 +7,67 @@ from django.shortcuts import render_to_response,redirect
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
+from django.utils import timezone
 
 def index(request):
 	
 	latest_projects = Project.objects.order_by('-pub_date')[:5]
 	context = {
+		'title': "Projects",
 		'latest_projects': latest_projects
 		}
 	return render(request, 'projects/index.html', context)
+	
+def new(request):
+	projects = Project.objects.all()
+	new_projects = []
+	for project in projects:
+		if project.is_recent():
+			new_projects.append(project)
+	context = {
+		'title': "New Projects",
+		'latest_projects': new_projects
+	}
+	return render(request, 'projects/index.html', context)
 
+	
+def hot(request):
+	projects = Project.objects.all()
+	new_projects = []
+	for project in projects:
+		if project.project_rating > 4:
+			new_projects.append(project)
+	context = {
+		'title': "Hot Projects",
+		'latest_projects': new_projects
+	}
+	return render(request, 'projects/index.html', context)
+
+		
+def trending(request):
+	projects = Project.objects.all()
+	new_projects = []
+	for project in projects:
+		if project.project_rating > 3:
+			new_projects.append(project)
+	context = {
+		'title': "Trending Projects",
+		'latest_projects': new_projects
+	}
+	return render(request, 'projects/index.html', context)
 def project(request, project_id):
 	project = get_object_or_404(Project, pk=project_id)
 	return render(request, 'projects/project.html', {'project': project})
 
+def delete_project(request, project_id):
+	get_object_or_404(Project, pk=project_id).delete()	
+	return render(request, 'projects/index.html')
+	
+def delete_comment(request, comment_id):
+	get_object_or_404(Comment, pk=comment_id).delete()	
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+	
+#Check if user already exists before trying to register
 def register(request):
 	if request.POST:
 		username = request.POST['username']
@@ -31,7 +79,7 @@ def register(request):
 			user.save()
 			user = authenticate(username=username, password=password)
 			login(request, user)
-			return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+			return render(request, 'projects/index.html')
 		else:
 			return render(request, 'projects/register.html', {'message': "Password mismatch."})		
 	return render(request, 'projects/register.html')
@@ -47,7 +95,7 @@ def login_user(request):
 		user = authenticate(username=username, password=password)
 		if user is not None:
 			login(request, user)
-			return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+			return render(request, 'projects/index.html')
 		else:
 			return render(request, 'projects/login.html', {'message': "Wrong username or password"})
 	return render(request, 'projects/login.html')
@@ -61,11 +109,10 @@ def comment(request, project_id):
 		comment_project = get_object_or_404(Project, pk=project_id)
 		comment = Comment(project=comment_project, 
 					comment_text = request.POST['comment-input-text'],
-					comment_owner = request.user)
+					comment_owner = request.user, pub_date = timezone.now())
 		comment.save()
 		return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-		
 		
 		
 		

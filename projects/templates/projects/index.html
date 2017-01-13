@@ -15,7 +15,7 @@
 {% endblock %}
 {% block content %}
 <div class="projects">
-				<h1> Hot Projects </h1>
+				<h1> {{title}} </h1>
 				{% if latest_projects %}
 					{% for project in latest_projects %}
 						<div class="project">
@@ -23,6 +23,9 @@
 								<h2> <a href="{% url 'project' project.id %}">{{project.project_name}}</a></h2>
 								<h3> <a href="{% url 'user' project.project_owner.id %}">{{project.project_owner}}</a></h3>
 							</div>
+							{% if user.is_superuser %}
+								<p><a href="{% url 'delete_project' project.id %}">Delete project </a></p>
+							{% endif %}
 							<div class="content">
 								<div class="text">
 								<p>{{project.project_text}}</p>
