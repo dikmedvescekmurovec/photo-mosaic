@@ -12,6 +12,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+#Display 5 last projects
 def index(request):
 	latest_projects = Project.objects.order_by('-pub_date')[:5]
 	context = {
@@ -20,6 +21,7 @@ def index(request):
 		}
 	return render(request, 'projects/index.min.html', context)
 	
+#Display new projects
 def new(request):
 	projects = Project.objects.all()
 	new_projects = []
@@ -32,7 +34,8 @@ def new(request):
 	}
 	return render(request, 'projects/index.min.html', context)
 
-	
+
+#Display projects with rating above 4
 def hot(request):
 	projects = Project.objects.all()
 	new_projects = []
@@ -45,7 +48,7 @@ def hot(request):
 	}
 	return render(request, 'projects/index.min.html', context)
 
-		
+#Display projects with rating above 3	
 def trending(request):
 	projects = Project.objects.all()
 	new_projects = []
@@ -57,10 +60,13 @@ def trending(request):
 		'latest_projects': new_projects
 	}
 	return render(request, 'projects/index.min.html', context)
+	
+#Display specific project
 def project(request, project_id):
 	project = get_object_or_404(Project, pk=project_id)
 	return render(request, 'projects/project.min.html', {'project': project})
 
+#IF superuser, delete project with project_id
 def delete_project(request, project_id):
 	if request.user.is_superuser:
 		get_object_or_404(Project, pk=project_id).delete()	
@@ -72,14 +78,14 @@ def delete_project(request, project_id):
 		}
 	return render(request, 'projects/index.min.html', context)
 
-
+#IF superuser, delete comment with comment_id
 def delete_comment(request, comment_id):
 	if request.user.is_superuser:
 		get_object_or_404(Comment, pk=comment_id).delete()	
 		return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-
+#IF superuser, delete user with user_id
 def delete_user(request, user_id):
 	if request.user.is_superuser:
 		get_object_or_404(User, pk=user_id).delete()	
@@ -87,7 +93,7 @@ def delete_user(request, user_id):
 	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 	
-#Check if user already exists before trying to register
+#Registers user with specified data
 def register(request):
 	if request.POST:
 		username = request.POST['username']
@@ -109,6 +115,7 @@ def register(request):
 			return render(request, 'projects/register.min.html', {'message': "Password mismatch."})		
 	return render(request, 'projects/register.min.html')
 
+#Logs user out
 def logout_user(request):
 	logout(request)
 	latest_projects = Project.objects.order_by('-pub_date')[:5]
@@ -118,6 +125,7 @@ def logout_user(request):
 		}
 	return render(request, 'projects/index.min.html', context)
 	
+#IF data correct, logs user in
 def login_user(request):
 	if request.POST:
 		username = request.POST['username']
@@ -135,10 +143,12 @@ def login_user(request):
 			return render(request, 'projects/login.min.html', {'message': "Wrong username or password"})
 	return render(request, 'projects/login.min.html')
 
+#Views specific user
 def user(request, user_id):
 	viewed_user = get_object_or_404(User, pk=user_id)
 	return render(request, 'projects/user.min.html', {'viewed_user': viewed_user})
 	
+#Comments on project wiht data entered in form
 def comment(request, project_id):
 	if request.POST:
 		comment_project = get_object_or_404(Project, pk=project_id)
@@ -149,6 +159,8 @@ def comment(request, project_id):
 		return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 	
+	
+#IF superuser it displays users and projects, giving the admin the option of deleting them
 def admin(request):
 	if request.user.is_superuser:
 		projects = Project.objects.all()

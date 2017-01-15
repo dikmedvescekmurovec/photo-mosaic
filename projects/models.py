@@ -4,6 +4,7 @@ from django.utils import timezone
 
 from django.contrib.auth.models import User
 
+#Projects that users can create and post on site to get donations
 class Project(models.Model):
 
 	project_name = models.CharField(max_length=200)
@@ -24,6 +25,7 @@ class Project(models.Model):
 	def percentage(self):
 		return 100*(self.project_funded/self.project_needed)
 		
+#Comments written on projects
 class Comment(models.Model):
 	def __str__(self):
 		return self.comment_text
