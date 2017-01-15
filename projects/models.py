@@ -32,3 +32,6 @@ class Comment(models.Model):
 	comment_text = models.CharField(max_length=500)
 	comment_owner = models.ForeignKey(User, on_delete=models.CASCADE)
 	pub_date = models.DateTimeField('date published')
+	
+	def is_recent(self):
+		return self.pub_date >= timezone.now() - datetime.timedelta(days=3)

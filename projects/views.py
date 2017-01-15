@@ -8,9 +8,12 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
+import logging
+
+logger = logging.getLogger(__name__)
 
 def index(request):
-	
+	logger.info("User " + str(request.user) + " accessed index.")
 	latest_projects = Project.objects.order_by('-pub_date')[:5]
 	context = {
 		'title': "Projects",
@@ -60,10 +63,12 @@ def project(request, project_id):
 	return render(request, 'projects/project.html', {'project': project})
 
 def delete_project(request, project_id):
+	logger.info("Project " + str(project_id) + " deleted by " + str(request.user) + ".")
 	get_object_or_404(Project, pk=project_id).delete()	
 	return render(request, 'projects/index.html')
 	
 def delete_comment(request, comment_id):
+	logger.info("Comment " + str(project_id) + " deleted by " + str(request.user) + ".")
 	get_object_or_404(Comment, pk=comment_id).delete()	
 	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 	
