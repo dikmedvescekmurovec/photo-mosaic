@@ -13,13 +13,12 @@ import logging
 logger = logging.getLogger(__name__)
 
 def index(request):
-	logger.info("User " + str(request.user) + " accessed index.")
 	latest_projects = Project.objects.order_by('-pub_date')[:5]
 	context = {
 		'title': "Projects",
 		'latest_projects': latest_projects
 		}
-	return render(request, 'projects/index.html', context)
+	return render(request, 'projects/index.min.html', context)
 	
 def new(request):
 	projects = Project.objects.all()
@@ -31,7 +30,7 @@ def new(request):
 		'title': "New Projects",
 		'latest_projects': new_projects
 	}
-	return render(request, 'projects/index.html', context)
+	return render(request, 'projects/index.min.html', context)
 
 	
 def hot(request):
@@ -44,7 +43,7 @@ def hot(request):
 		'title': "Hot Projects",
 		'latest_projects': new_projects
 	}
-	return render(request, 'projects/index.html', context)
+	return render(request, 'projects/index.min.html', context)
 
 		
 def trending(request):
@@ -57,20 +56,36 @@ def trending(request):
 		'title': "Trending Projects",
 		'latest_projects': new_projects
 	}
-	return render(request, 'projects/index.html', context)
+	return render(request, 'projects/index.min.html', context)
 def project(request, project_id):
 	project = get_object_or_404(Project, pk=project_id)
-	return render(request, 'projects/project.html', {'project': project})
+	return render(request, 'projects/project.min.html', {'project': project})
 
 def delete_project(request, project_id):
-	logger.info("Project " + str(project_id) + " deleted by " + str(request.user) + ".")
-	get_object_or_404(Project, pk=project_id).delete()	
-	return render(request, 'projects/index.html')
-	
+	if request.user.is_superuser:
+		get_object_or_404(Project, pk=project_id).delete()	
+		return render(request, 'projects/index.min.html')
+	latest_projects = Project.objects.order_by('-pub_date')[:5]
+	context = {
+		'title': "Projects",
+		'latest_projects': latest_projects
+		}
+	return render(request, 'projects/index.min.html', context)
+
+
 def delete_comment(request, comment_id):
-	logger.info("Comment " + str(project_id) + " deleted by " + str(request.user) + ".")
-	get_object_or_404(Comment, pk=comment_id).delete()	
+	if request.user.is_superuser:
+		get_object_or_404(Comment, pk=comment_id).delete()	
+		return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+def delete_user(request, user_id):
+	if request.user.is_superuser:
+		get_object_or_404(User, pk=user_id).delete()	
+		return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
 	
 #Check if user already exists before trying to register
 def register(request):
@@ -84,14 +99,24 @@ def register(request):
 			user.save()
 			user = authenticate(username=username, password=password)
 			login(request, user)
-			return render(request, 'projects/index.html')
+			latest_projects = Project.objects.order_by('-pub_date')[:5]
+			context = {
+				'title': "Projects",
+				'latest_projects': latest_projects
+				}
+			return render(request, 'projects/index.min.html', context)
 		else:
-			return render(request, 'projects/register.html', {'message': "Password mismatch."})		
-	return render(request, 'projects/register.html')
+			return render(request, 'projects/register.min.html', {'message': "Password mismatch."})		
+	return render(request, 'projects/register.min.html')
 
 def logout_user(request):
 	logout(request)
-	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+	latest_projects = Project.objects.order_by('-pub_date')[:5]
+	context = {
+		'title': "Projects",
+		'latest_projects': latest_projects
+		}
+	return render(request, 'projects/index.min.html', context)
 	
 def login_user(request):
 	if request.POST:
@@ -100,14 +125,19 @@ def login_user(request):
 		user = authenticate(username=username, password=password)
 		if user is not None:
 			login(request, user)
-			return render(request, 'projects/index.html')
+			latest_projects = Project.objects.order_by('-pub_date')[:5]
+			context = {
+				'title': "Projects",
+				'latest_projects': latest_projects
+				}
+			return render(request, 'projects/index.min.html', context)
 		else:
-			return render(request, 'projects/login.html', {'message': "Wrong username or password"})
-	return render(request, 'projects/login.html')
+			return render(request, 'projects/login.min.html', {'message': "Wrong username or password"})
+	return render(request, 'projects/login.min.html')
 
 def user(request, user_id):
 	viewed_user = get_object_or_404(User, pk=user_id)
-	return render(request, 'projects/user.html', {'viewed_user': viewed_user})
+	return render(request, 'projects/user.min.html', {'viewed_user': viewed_user})
 	
 def comment(request, project_id):
 	if request.POST:
@@ -118,7 +148,21 @@ def comment(request, project_id):
 		comment.save()
 		return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-		
+	
+def admin(request):
+	if request.user.is_superuser:
+		projects = Project.objects.all()
+		users = User.objects.all()
+		return render(request, 'projects/admin.html', {'projects': projects, 'users': users})
+	else:
+		latest_projects = Project.objects.order_by('-pub_date')[:5]
+		context = {
+			'title': "Projects",
+			'latest_projects': latest_projects
+			}
+		return render(request, 'projects/index.min.html', context)
+
+
 		
 		
 		

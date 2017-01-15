@@ -12,7 +12,9 @@ urlpatterns = [
 	url(r'^(?P<project_id>[0-9]+)/comment/$', views.comment, name='comment'),
 	url(r'^new/', views.new, name='new'),
 	url(r'^hot/', views.hot, name='hot'),
+	url(r'^admin/', views.admin, name='admin'),
 	url(r'^trending/', views.trending, name='trending'),
 	url(r'^(?P<project_id>[0-9]+)/delete/$', views.delete_project, name='delete_project'),
 	url(r'^delete_comment/(?P<comment_id>[0-9]+)$', views.delete_comment, name='delete_comment'),
+	url(r'^delete_user/(?P<user_id>[0-9]+)$', views.delete_user, name='delete_user'),
 ]
